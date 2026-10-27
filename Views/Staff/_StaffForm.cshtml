@@ -1,0 +1,39 @@
+﻿@* ==== DELIVERABLE 3 ==== *@
+
+@model StaffOps.Models.StaffMember?
+
+@{
+    StaffMember staff = Model ?? new(Guid.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
+    bool isEditing = staff.StaffId != Guid.Empty;
+    string action = isEditing ? "Edit" : "Create";
+}
+
+<h2>@(isEditing ? "Edit Staff Member" : "Add Staff Member")</h2>
+
+<form asp-action="@action" method="post">
+    @if (isEditing)
+    {
+        <input type="hidden" asp-for="StaffId" />
+    }
+
+    <div class="grid-2">
+        <label asp-for="FullName">Full Name</label>
+        <input asp-for="FullName"/>
+            
+        <label asp-for="Email">Email</label>
+        <input asp-for="Email"/>
+        
+        <label asp-for="Position">Position</label>
+        <input asp-for="Position"/>
+        
+        <label asp-for="Unit">Unit</label>
+        <input style="margin-bottom: 1.25rem;" asp-for="Unit"/>
+    </div>
+
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div role="alert" asp-validation-summary="All"></div>
+    }
+
+    <button type="submit" class="success full-width mt-1">@(isEditing ? "Save Changes" : "Add Staff Member")</button>
+</form>

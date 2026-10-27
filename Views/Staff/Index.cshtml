@@ -1,0 +1,91 @@
+﻿@* ==== DELIVERABLE 3 ==== *@
+
+@model StaffOps.Models.StaffIndexViewModel
+
+@{
+    ViewData["Title"] = "Staff Members";
+}
+
+<link rel="stylesheet" href="~/css/styles.css" />
+
+<header>
+    <h1>StaffOps</h1>
+        
+    <form asp-action="Logout" asp-controller="Access" method="post">
+        <button type="submit" class="secondary">Log out</button>
+    </form>
+</header>
+
+<main>
+    <section class="justify-between">
+        <h2>Staff Members</h2>
+        
+        <form asp-action="Index" method="get">
+            <input type="hidden" name="search" value="@Model.SearchQuery" />
+            <input type="hidden" name="add" value="true" />
+            <button type="submit" class="success">Add Staff Member</button>
+        </form>
+    </section>
+
+    <nav>
+        <form asp-action="Index" method="get" class="flex-gap-05">
+            <input type="text" name="search" value="@Model.SearchQuery" placeholder="Search either by name, email, or position..."/>
+            <button type="submit" class="primary">Search</button>
+        </form>
+
+        @if (!string.IsNullOrWhiteSpace(Model.SearchQuery))
+        { 
+            <form asp-action="Index" method="get">
+                <button type="submit" class="secondary">Clear</button>
+            </form>
+        }
+    </nav>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Full Name</th>
+                <th>Email</th>
+                <th>Position</th>
+                <th>Unit</th>
+                <th></th>
+            </tr>
+        </thead>
+        
+        <tbody>
+            @foreach (StaffMember staff in Model.StaffMembers)
+            {
+                <tr>
+                    <td><strong>@staff.FullName</strong></td>
+                    <td>@staff.Email</td>
+                    <td><span>@staff.Position</span></td>
+                    <td>@staff.Unit</td>
+                    <td>
+                        <form asp-action="Index" method="get">
+                            <input type="hidden" name="editId" value="@staff.StaffId" />
+                            <input type="hidden" name="search" value="@Model.SearchQuery" />
+                            <button type="submit" class="secondary">Edit</button>
+                        </form>
+
+                        <form asp-action="Delete" method="post">
+                            <input type="hidden" name="id" value="@staff.StaffId" />
+                            <button type="submit" class="danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @if (Model.ShowForm)
+    {
+        <article class="mt-2">
+            <partial name="_StaffForm" model="Model.FailedSubmission" />
+
+            <form asp-action="Index" method="get" class="mt-1">
+                <input type="hidden" name="search" value="@Model.SearchQuery" />
+                <button type="submit" class="secondary full-width">Cancel</button>
+            </form>
+        </article>
+    }
+</main>

@@ -1,0 +1,36 @@
+﻿@* ==== DELIVERABLE 3 ==== *@
+
+@{
+    ViewData["Title"] = "Administrator Login";
+    string? returnUrl = ViewData["ReturnUrl"] as string;
+}
+
+<link rel="stylesheet" href="~/css/styles.css" />
+
+<main>
+    <article>
+        <h1>Administrator Login</h1>
+
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div role="alert" asp-validation-summary="All"></div>
+        }
+
+        @if (!string.IsNullOrEmpty(returnUrl))
+        {
+            <p class="mb-1-5 text-muted">You must be logged in as an administrator to access that page.</p>
+        }
+
+        <form asp-action="Login" asp-controller="Access" method="post">
+            <input type="hidden" name="returnUrl" value="@returnUrl" />
+            
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required placeholder="Enter your username" />
+            
+            <label for="password">Password</label>
+            <input style="margin-bottom: 1.25rem;" type="password" id="password" name="password" required placeholder="Enter your password" />
+
+            <button type="submit" class="primary full-width">Log In</button>
+        </form>
+    </article>
+</main>
